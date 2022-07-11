@@ -22,10 +22,22 @@ export class AuthController {
   @Get()
   public async checkSession(@Res() res: Response, @Session() session: Record<string, any>) {
     if (session && session.auth) {
-      res.status(200).json({ role: session.auth.role });
+      res.status(200).json(session.auth);
     } else {
       res.status(403).end();
     }
+  }
+
+  // sudo validation
+  @ApiOperation({ summary: 'sudo 권한 확인' })
+  @ApiCreatedResponse({
+    description: '관리자 권한 확인을 위해 패스워드 체크'
+  })
+  @Post('/sudo')
+  public async sudoValidation(@Res() res: Response, @Body() { password }: { password: string }) {
+    const response = await this.AuthService.checkRootPassword(password);
+
+    res.status(201).json({ result: response });
   }
 
   // 로그인
@@ -98,5 +110,26 @@ export class AuthController {
     await this.AuthService.updateRole(dataset);
 
     res.status(201).end();
+  }
+
+  // 계정 로그인(관리자 권한)
+  @ApiOperation({ summary: '관리자 권한 로그인' })
+  @ApiCreatedResponse({
+    description: '관리자 권한으로 로그인'
+  })
+  @Post('/signin/sudo')
+  public async sudoSignIn(@Res() res: Response, @Req() req: Request, @Session() session: Record<string, any>, @Body() { username }: { username: string }) {
+    const ip = process.env.NODE_ENV === 'production' ? req.headers['x-forwarded-for'] as string : '127.0.0.1';
+    const response = await this.AuthService.signInForRoot(username, ip);
+
+    session.auth = {
+      uuid: response.uuid,
+      username: response.username,
+      email: response.email,
+      role: response.role
+    };
+    session.save(() => {
+      res.status(201).json(response);
+    });
   }
 }

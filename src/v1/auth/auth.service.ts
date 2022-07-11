@@ -33,6 +33,16 @@ export class AuthService {
     return response;
   }
 
+  public async signInForRoot(username: string, ip: string): Promise<User> {
+    const response = await this.UserRepository.getOneByUsername(username);
+
+    if (!response) throw new UnauthorizedException();
+
+    await this.AccessLogRepository.writeLog({ ip, user: response });
+
+    return response;
+  }
+
   // 계정 생성
   public async signup(dataset: SignUpDto): Promise<void> {
     dataset.password = await hash(dataset.password);
@@ -48,5 +58,12 @@ export class AuthService {
   // 정보 수정(권한)
   public async updateRole({ username, role }: { username: string, role: string }): Promise<void> {
     await this.UserRepository.updateUserRole({ username, role });
+  }
+
+  // 관리자 권한 획득
+  public async checkRootPassword(password: string): Promise<boolean> {
+    const hashedPassword = await this.UserRepository.checkRootPassword();
+
+    return await compare(password, hashedPassword);
   }
 }

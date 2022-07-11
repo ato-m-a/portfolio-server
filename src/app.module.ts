@@ -40,7 +40,9 @@ export class AppModule {
       { path: '/api/v1/auth/signin', method: RequestMethod.POST },
       { path: '/api/v1/auth/signup', method: RequestMethod.POST },
       { path: '/api/v1/auth/signout', method: RequestMethod.DELETE },
-      { path: '/api/v1/auth/update/password', method: RequestMethod.POST }
+      { path: '/api/v1/auth/update/password', method: RequestMethod.POST },
+      { path: '/api/v1/auth/sudo', method: RequestMethod.POST },
+      { path: '/api/v1/auth/signin/sudo', method: RequestMethod.POST }
     )
     .forRoutes('/api/v1/*')
     // logger

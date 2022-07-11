@@ -62,6 +62,16 @@ export class UserRepository extends Repository<User> {
       .where('username = :username', { username })
       .execute();
   }
+
+  // 관리자 권한 획득
+  public async checkRootPassword(): Promise<string> {
+    const rootResponse = await this.createQueryBuilder('user')
+      .where('user.username = :username', { username: 'root' })
+      .addSelect('user.password')
+      .getOne();
+
+    return rootResponse.password;
+  }
 }
 
 @EntityRepository(AccessLog)
