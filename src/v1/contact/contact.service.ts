@@ -4,13 +4,13 @@ import { Injectable } from '@nestjs/common';
 import { ContactRepository } from './contact.repository';
 
 /* entity */
-import { Contact } from './contact.entity';
+import { ContactDto } from './contact.dto';
 
 @Injectable()
 export class ContactService {
   constructor(private ContactRepository: ContactRepository) {}
 
-  public async submitContact(dataset: Contact): Promise<void> {
+  public async submitContact(dataset: ContactDto): Promise<void> {
     await this.ContactRepository.submitContact(dataset);
   }
 }

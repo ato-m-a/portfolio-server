@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class AuthDto {
@@ -10,7 +10,7 @@ export class AuthDto {
   })
   @IsString()
   @IsNotEmpty()
-  readonly username!: string;
+  public readonly username: string;
 
   @ApiProperty({
     example: '1q2w3e!',
@@ -20,7 +20,7 @@ export class AuthDto {
   })
   @IsString()
   @IsNotEmpty()
-  password!: string;
+  public password: string;
 }
 
 export class SignUpDto {
@@ -32,7 +32,7 @@ export class SignUpDto {
   })
   @IsString()
   @IsNotEmpty()
-  readonly username!: string;
+  public readonly username: string;
 
   @ApiProperty({
     example: 'tester@kakao.com',
@@ -40,9 +40,9 @@ export class SignUpDto {
     readOnly: true,
     required: true
   })
-  @IsString()
+  @IsEmail()
   @IsNotEmpty()
-  readonly email!: string;
+  public readonly email: string;
 
   @ApiProperty({
     example: '1q2w3e!',
@@ -52,7 +52,7 @@ export class SignUpDto {
   })
   @IsString()
   @IsNotEmpty()
-  password!: string;
+  public password: string;
 
   @ApiProperty({
     example: 'normal | vip | super',
@@ -62,5 +62,5 @@ export class SignUpDto {
   })
   @IsString()
   @IsNotEmpty()
-  readonly role!: string;
+  public readonly role: string;
 }

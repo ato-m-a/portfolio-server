@@ -5,7 +5,7 @@ import { hash, compare } from '../../../util/bcrypt';
 import { AuthDto, SignUpDto } from './auth.dto';
 
 /* entity */
-import { User, AccessLog } from './auth.entity';
+import { User } from './auth.entity';
 
 /* repo */
 import { UserRepository, AccessLogRepository } from './auth.repository';
